@@ -37,7 +37,7 @@ Locomotive.configure do |config|
   #
   # Ex:
   # config.mailer_sender = 'support'
-  config.mailer_sender = 'no-reply@shared-platform.dev'
+  config.mailer_sender = 'no-reply@shared-platform.test'
 
   # Add the checksum of a theme asset at the end of its path to allow public caching.
   # By default, it's disabled.

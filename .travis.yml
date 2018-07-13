@@ -1,0 +1,49 @@
+language: ruby
+
+bundler_args: '--with=development --jobs=3 --retry=3 --verbose'
+
+rvm:
+  - 2.2.4
+
+sudo: required
+
+cache:
+  bundler: true
+
+git:
+  depth: 15
+
+notifications:
+  email: false
+  # slack: some_org:some_api_key
+
+addons:
+  hosts:
+    - 'localhost'
+    - 'shared-platform.test'
+  # code_climate:
+  #   repo_token: some_secret_token
+  postgresql: '10.4'
+
+services:
+  - mongodb
+  - postgresql
+  - rabbitmq
+  - redis-server
+
+# before_install:
+#   - 'gem install travis && (bin/travis-dedup $TRAVIS_REPO_SLUG $TRAVIS_ACCESS_TOKEN &)'
+
+script: bin/travis-runner
+
+matrix:
+  fast_finish: true
+
+env:
+  global:
+    # Secured: TRAVIS_ACCESS_TOKEN
+    - secure: "uVVyXCXIuifjqFTfETuzu3DogwN66gjfNMyPTGH6ErB/0ZVa90qjoJHSz3jHKPF7VoVJSVzVmhHLuO7/w1yiWlfC8qEb7KsZV2iQ6zt7YOVKDA+AVpz8zOjSGbD0aZcPoC66oFJXEso10Li/on4N26QjoFGl/jF/NG7PI4FMBYwoKci2l6OFrDL24xcy1Nf9VrFcEYKCbU0XH7MhSnoJ63qjfLFUWCQB2y0abaHY5uEtb1WMDMeYjAByx+YdIMWgj44XOa0n6hlnwkwBl/KXxRELcLXrcQyHVBAbzBL7cuCEiVgLk5PoT4tNLZCjtP20LM99QyYid4CBIo7vWBX1JYjx3ioqevjFlGKwTuJUvdYiyD5Dh0pRO7BE7LdlVi38TngTQ9Q/6hUaQC7vQ+rcNiwPP/jDH9Td+NU22MhyYthK0l3dZR9fxEgLt8iKU63+ETFBPD6dj++W83HKPTL6SxNyYu1KPG4WVjsWCWQkN6RQZ+rxsVjZGyEnPIkoD8ME6NBHAX9R9UOWovdPhXIVowOlk9G2iE0Om2aXbw4oSUq1+PwHf1EhMWgrkiPefc6z+lH5moIosRI4B1iFLii/a6bQrQH6VhqFZ1zFx63vUnmuC3A/h0Znn/KuQsN76BnDR/bJ4GYkGXVlQD70cnJBjg+aZca/oCRVIMW3PvkFzEk="
+    # - RABBITMQ_VERSION=3.4.3
+  matrix:
+  - RAILS_ENV=linting RAKE_TASK=linters:all
+  - RAILS_ENV=test    RSPEC_SUITE=spec/     INSTALL_DEPS=false
