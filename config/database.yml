@@ -1,0 +1,26 @@
+default: &default
+  adapter: postgresql
+  pool: 5
+  timeout: 5000
+
+nulldb: &nulldb
+  adapter: nulldb
+
+development:
+  <<: *default
+  database: shared_platform_dummy_development
+
+test: &test
+  <<: *default
+  database: shared_platform_dummy_test
+
+linting:
+  <<: *nulldb
+
+staging:
+  <<: *default
+  database: shared_platform_dummy_staging
+
+production:
+  <<: *default
+  database: shared_platform_dummy_production

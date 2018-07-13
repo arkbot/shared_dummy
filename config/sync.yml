@@ -1,0 +1,46 @@
+development:
+  server: 'stomp://guest:guest@localhost:61613'
+  api_key: 'client'
+  auth_token: 'client'
+  adapter: 'Stomp'
+  encryption: false
+  async: true
+  debug: false
+  websocket: 'http://localhost:15674/stomp'
+  destination: '/topic/shared-platform-dummy-sync-'
+
+test:
+  server: 'stomp://guest:guest@localhost:61613'
+  api_key: 'guest'
+  auth_token: 'guest'
+  adapter: 'Stomp'
+  encryption: false
+  async: true
+  debug: false
+  websocket: 'http://localhost:15674/stomp'
+  destination: '/topic/shared-platform-dummy-sync-'
+
+linting:
+  adapter: false
+
+staging:
+  server: 'stomp://guest:guest@localhost:61613'
+  api_key: 'client'
+  auth_token: 'client'
+  adapter: 'Stomp'
+  encryption: false
+  async: true
+  debug: false
+  websocket: 'http://localhost:15674/stomp'
+  destination: '/topic/shared-platform-dummy-sync-'
+
+production:
+  server: 'stomp://guest:guest@localhost:61613'
+  api_key: 'client'
+  auth_token: 'client'
+  adapter: 'Stomp'
+  encryption: false
+  async: true
+  debug: false
+  websocket: 'http://localhost:15674/stomp'
+  destination: '/topic/shared-platform-dummy-sync-'

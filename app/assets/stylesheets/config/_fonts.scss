@@ -1,0 +1,47 @@
+// NOTE: Use the following ruby function to rename font files for usage here.
+//
+// def rename_fonts(regex, name, style, weight)
+//   stripped_name = name.gsub(/ /, '')
+//   font_root = Rails.root.join('app', 'assets', 'fonts').to_s
+//
+//   Dir["#{font_root}/**/*"].each do |file|
+//     next unless file =~ regex
+//     extension = file.gsub(font_root, '').gsub(/^(.+\.)/, '')
+//
+//     new_name = "#{stripped_name}#{weight}-#{style}.#{extension}"
+//     puts "#{file} -> #{new_name}"
+//     File.rename(file, "#{font_root}/#{new_name}")
+//   end
+//
+//   "@include font-face-compatibility('#{name}', #{weight}, '#{style}');"
+// end
+
+// General format: <Name><Weight>-<Style>.<extension>
+//
+//                 Name:      Constantized Camelcase (with whitespace stripped)
+//                 Weight:    Numeric
+//                 Style:     Regular or Italic
+//                 Extension: EOT / SVG / TTF / OTF / WOFF / WOFF2
+
+@import 'shared_platform/modules/mixins';
+
+@include font-face-compatibility('Indie Flower', 400, 'Regular');
+
+@include font-face-compatibility('Museo', 300, 'Regular');
+@include font-face-compatibility('Museo', 500, 'Regular');
+@include font-face-compatibility('Museo', 700, 'Regular');
+
+@include font-face-compatibility('Open Sans Condensed', 300, 'Italic');
+@include font-face-compatibility('Open Sans Condensed', 300, 'Regular');
+@include font-face-compatibility('Open Sans Condensed', 700, 'Regular');
+
+@include font-face-compatibility('Open Sans', 300, 'Italic');
+@include font-face-compatibility('Open Sans', 300, 'Regular');
+@include font-face-compatibility('Open Sans', 400, 'Italic');
+@include font-face-compatibility('Open Sans', 400, 'Regular');
+@include font-face-compatibility('Open Sans', 600, 'Italic');
+@include font-face-compatibility('Open Sans', 600, 'Regular');
+@include font-face-compatibility('Open Sans', 700, 'Italic');
+@include font-face-compatibility('Open Sans', 700, 'Regular');
+@include font-face-compatibility('Open Sans', 800, 'Italic');
+@include font-face-compatibility('Open Sans', 800, 'Regular');
