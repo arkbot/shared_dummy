@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+export RAILS_ENV=$RAILS_ENV
+
+set +xe
+
+if [ -n "$INSTALL_DEPS" ]; then
+  # For 3.6.0
+  # RABBITMQ_ARCHIVE=rabbitmq-server-generic-unix-$RABBITMQ_VERSION.tar.xz
+  # RABBITMQ_URL=https://www.rabbitmq.com/releases/rabbitmq-server/v$RABBITMQ_VERSION/$RABBITMQ_ARCHIVE
+
+  # For 3.4.3
+  RABBITMQ_ARCHIVE=rabbitmq-server-generic-unix-$RABBITMQ_VERSION.tar.gz
+  RABBITMQ_URL=http://www.rabbitmq.com/releases/rabbitmq-server/v$RABBITMQ_VERSION/$RABBITMQ_ARCHIVE
+
+  wget $RABBITMQ_URL
+  tar xf $RABBITMQ_ARCHIVE
+
+  export RABBITMQ_HOME=`pwd`/rabbitmq_server-$RABBITMQ_VERSION
+  export PATH=$RABBITMQ_HOME/sbin:$PATH
+
+  export RABBITMQ_MNESIA_BASE=$RABBITMQ_HOME/var/lib/rabbitmq/mnesia
+  mkdir -p $RABBITMQ_MNESIA_BASE
+
+  export RABBITMQ_LOG_BASE=$RABBITMQ_HOME/var/log/rabbitmq
+  mkdir -p $RABBITMQ_LOG_BASE
+
+  export RABBITMQ_PLUGINS_DIR=$RABBITMQ_HOME/plugins
+  export RABBITMQ_ENABLED_PLUGINS_FILE=$RABBITMQ_HOME/etc/rabbitmq/enabled_plugins
+
+  # cp /etc/rabbitmq/enabled_plugins $RABBITMQ_ENABLED_PLUGINS_FILE
+  # rabbitmq-plugins enable --offline rabbitmq_amqp1_0 rabbitmq_stomp rabbitmq_web_stomp
+
+  rabbitmq-plugins enable --offline \
+    rabbitmq_amqp1_0                \
+    rabbitmq_management             \
+    rabbitmq_management_visualiser  \
+    rabbitmq_mqtt                   \
+    rabbitmq_stomp                  \
+    rabbitmq_web_stomp
+
+  cat $RABBITMQ_ENABLED_PLUGINS_FILE
+
+  set -xev
+  rabbitmq-server --detached &
+  unset INSTALL_DEPS
+  sleep 5
+fi
+
+set +xe
+
+if [ -n "$RAKE_TASK" ]; then
+  set -xev
+  bundle install && bundle exec rake app:setup:minimal && bundle exec rake $RAKE_TASK
+elif [ -n "$RSPEC_SUITE" ]; then
+  set -xev
+  bundle install && bundle exec rake app:setup && bundle exec rspec $RSPEC_SUITE
+fi

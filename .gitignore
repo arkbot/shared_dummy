@@ -1,5 +1,7 @@
 .bundle
 
+.github_oauth
+
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
@@ -33,7 +35,7 @@ data/*
 
 node_modules
 
-bin/
+bin/*
 !bin/rails
 !bin/travis-dedup
 !bin/travis-runner
@@ -44,8 +46,7 @@ bin/
 
 /coverage/
 
-spec/dummy/.nvmrc
-spec/dummy/package.json
-spec/dummy/Gemfile*
+package.json
+Gemfile.*
 
 .DS_Store

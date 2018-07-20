@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'pry'
+rescue LoadError
+  nil
+end
+
+require 'travis'
+require 'travis/pro'
+
+GIT_ORIGIN = `git config --get remote.origin.url`.strip
+GIT_APPLICATION = GIT_ORIGIN.gsub(/(git.+:)|(\.git)/, '').strip
+GIT_BRANCH = `git symbolic-ref HEAD`.gsub(%r(refs/heads/), '').strip
+GIT_REVISION = `git log -n 1 --pretty=format:"%H"`.strip
+
+ENV['TRAVIS_BRANCH'] ||= GIT_BRANCH
+ENV['TRAVIS_REPO_SLUG'] ||= GIT_APPLICATION
+
+Travis::Pro.access_token = ARGV.last
+repo = Travis::Pro::Repository.find(ENV['TRAVIS_REPO_SLUG'] || ARGV.first)
+
+# ignore_count = repo.settings.maximum_number_of_builds
+last_build_number = repo.builds(branch: ENV['TRAVIS_BRANCH']).first.number.to_i
+
+if ENV['TRAVIS_BRANCH'] && ENV['TRAVIS_PULL_REQUEST']
+  loop do
+    builds = repo
+      .builds(pull_request_number: ENV['TRAVIS_PULL_REQUEST'].to_i)
+      .select { |b| b.number.to_i > ENV['TRAVIS_BUILD_NUMBER'].to_i + 1}
+
+    # binding.pry if defined?(Pry)
+
+    if builds.any?
+      puts "\n=> New jobs detected after build (#{ENV['TRAVIS_BUILD_NUMBER']}):"
+      builds.each { |b| puts "- Build(##{b.commit_id}, jobs: #{b.job_ids.inspect})" }
+      puts "=> Terminating myself.\n"
+
+      repo.build(ENV['TRAVIS_BUILD_NUMBER'].to_i).cancel
+      system('kill -9 `pgrep ruby`')
+    end
+
+    sleep 60
+  end
+end

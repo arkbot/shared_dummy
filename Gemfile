@@ -1,7 +1,30 @@
 source 'https://rubygems.org'
 
-git_source(:github_https) { |repo| "https://github.com/#{repo}.git" }
-git_source(:github_ssh) { |repo| "git@github.com:#{repo}.git" }
+def setup_github_oauth!
+  return unless File.exists?('.github_oauth')
+  ENV['GITHUB_OAUTH_TOKEN'] ||= File.read('.github_oauth').strip
+end
+
+def private_github_uri(repo)
+  setup_github_oauth!
+
+  return "git@github.com:#{repo}.git" unless ENV['GITHUB_OAUTH_TOKEN']
+
+  "https://#{ENV['GITHUB_OAUTH_TOKEN']}:x-oauth-basic@github.com/#{repo}.git"
+end
+
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+git_source(:private) { |repo| private_github_uri(repo) }
+
+git_source(:shared) do |repo|
+  name = repo.split('/').last
+
+  if Dir.exists?("../../../#{name}")
+    File.expand_path("../../../#{name}")
+  else
+    private_github_uri(repo)
+  end
+end
 
 # gemspec
 
@@ -57,4 +80,4 @@ git_source(:github_ssh) { |repo| "git@github.com:#{repo}.git" }
 
 gem 'shared_platform',
   branch: 'master',
-  github_ssh: 'aeberlin/shared_platform'
+  shared: 'aeberlin/shared_platform'
