@@ -38,7 +38,7 @@ if Gem.loaded_specs.key?('locomotivecms')
     #
     # Ex:
     # config.mailer_sender = 'support'
-    config.mailer_sender = 'no-reply@shared-platform.test'
+    config.mailer_sender = 'no-reply@shared-dummy.test'
 
     # Add the checksum of a theme asset at the end of its path to allow public caching.
     # By default, it's disabled.

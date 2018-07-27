@@ -20,7 +20,7 @@ notifications:
 addons:
   hosts:
     - 'localhost'
-    - 'shared-platform.test'
+    - 'shared-dummy.test'
   # code_climate:
   #   repo_token: some_secret_token
   postgresql: '10.4'
@@ -34,6 +34,9 @@ services:
 # before_install:
 #   - 'gem install travis && (bin/travis-dedup $TRAVIS_REPO_SLUG $TRAVIS_ACCESS_TOKEN &)'
 
+before_script:
+  - 'psql -c "create database travis_ci_test;" -U postgres'
+
 script: bin/travis-runner
 
 matrix:
@@ -41,8 +44,8 @@ matrix:
 
 env:
   global:
-    # Secured: GITHUB_OAUTH_TOKEN, TRAVIS_ACCESS_TOKEN
-    - secure: "hLtqvxFyuxHrb0T1n7eg4+IxVSk8V6Tt4RgC4FI0NWdIz2GwTCICCgIBk4i+rHUX5Jb9T58IBpiXA2VTQhs5XGt52OHk//jYRTA/zLc7M1zVDLyr079iUY3xUj1w1i0c9xmVezRmz4bFJspV3IHMwa5ZoWuRdniBuge3wLQkM4KPZI7+3tYCJGbwW0QmMokrU18MEGE9s1Iq7AYdiTPYE7SaQ3H/uYc1+Y3CNFfWPIdfZFqHqpVM7bJox6IzxLkCjHmWWsmeVWl11CEtpOpIiAJX0oIFPWwOTwdQMDyoVQfVNuEZQ2BVdKiVktVoCLpbOSfQ0ExaQS/BvJ7Y9ncXIzyze8ij2NXBpUcVGfY7BtrmJpIKvsRwy8XVPPryHHvcpv+s99FsyyqW91XJH+Dran7RrVUaeFTMtY1rmyvcSouCwY/ovedJXEHbjMaH+29RuNerFqjQ6GTGvXoAfRSzTcLLpfzcUdFPObrbYi0BUMpNWRnVnZbCULPxdcv+byYwJBkH4XgU29auN6Lx+Qa/hAlX/ZPFDWdYtUFFYRdndLihHwg4jEnO4u0CNOl6VcNy87nuHSMMA8cMDIqijyog5iPRbuJzItK+VJmGJuVIUUBYo678btYCnIlozudq2M4e7hS6FZxy+MUvi/QjYCJZiDxRRnCVfP/4IP5E4vcRPrU="
+    # Secured: TRAVIS_ACCESS_TOKEN
+    - secure: "uVVyXCXIuifjqFTfETuzu3DogwN66gjfNMyPTGH6ErB/0ZVa90qjoJHSz3jHKPF7VoVJSVzVmhHLuO7/w1yiWlfC8qEb7KsZV2iQ6zt7YOVKDA+AVpz8zOjSGbD0aZcPoC66oFJXEso10Li/on4N26QjoFGl/jF/NG7PI4FMBYwoKci2l6OFrDL24xcy1Nf9VrFcEYKCbU0XH7MhSnoJ63qjfLFUWCQB2y0abaHY5uEtb1WMDMeYjAByx+YdIMWgj44XOa0n6hlnwkwBl/KXxRELcLXrcQyHVBAbzBL7cuCEiVgLk5PoT4tNLZCjtP20LM99QyYid4CBIo7vWBX1JYjx3ioqevjFlGKwTuJUvdYiyD5Dh0pRO7BE7LdlVi38TngTQ9Q/6hUaQC7vQ+rcNiwPP/jDH9Td+NU22MhyYthK0l3dZR9fxEgLt8iKU63+ETFBPD6dj++W83HKPTL6SxNyYu1KPG4WVjsWCWQkN6RQZ+rxsVjZGyEnPIkoD8ME6NBHAX9R9UOWovdPhXIVowOlk9G2iE0Om2aXbw4oSUq1+PwHf1EhMWgrkiPefc6z+lH5moIosRI4B1iFLii/a6bQrQH6VhqFZ1zFx63vUnmuC3A/h0Znn/KuQsN76BnDR/bJ4GYkGXVlQD70cnJBjg+aZca/oCRVIMW3PvkFzEk="
     # - RABBITMQ_VERSION=3.4.3
   matrix:
   - RAILS_ENV=linting RAKE_TASK=linters:all

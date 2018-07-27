@@ -12,7 +12,7 @@ development:
 
 test: &test
   <<: *default
-  database: shared_platform_dummy_test
+  database: travis_ci_test
 
 linting:
   <<: *nulldb

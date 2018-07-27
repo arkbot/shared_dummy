@@ -1,14 +1,14 @@
 development:
   handle:   'public'
-  host:     'shared-platform.test'
-  email:    'administrator@shared-platform.test'
+  host:     'shared-dummy.test'
+  email:    'administrator@shared-dummy.test'
   password: 'administrator'
   api_key:  'd49cd50f6f0d2b163f48fc73cb249f0244c37074'
 
 test:
   handle:   'public'
   host:     'localhost:39875'
-  email:    'administrator@shared-platform.test'
+  email:    'administrator@shared-dummy.test'
   password: 'administrator'
   api_key:  'd49cd50f6f0d2b163f48fc73cb249f0244c37074'
 
