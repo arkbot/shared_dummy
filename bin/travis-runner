@@ -52,9 +52,9 @@ set +xe
 if [ -n "$RAKE_TASK" ]; then
   set -xev
   bundle install && bundle exec rake gemfile:update
-  bundle update && bundle exec rake app:setup:minimal && bundle exec rake $RAKE_TASK
+  bundle update && bundle exec rake setup:minimal && bundle exec rake $RAKE_TASK
 elif [ -n "$RSPEC_SUITE" ]; then
   set -xev
   bundle install && bundle exec rake gemfile:update
-  bundle update && bundle exec rake app:setup && bundle exec rspec $RSPEC_SUITE
+  bundle update && bundle exec rake setup && bundle exec rspec $RSPEC_SUITE
 fi
